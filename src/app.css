@@ -1,0 +1,55 @@
+@import "tailwindcss";
+.bg00183e{
+  background-color: #00183e;
+}
+.bg00296b{
+    background-color: #00296b;
+}
+.bg003f88{
+    background-color: #003f88;
+}
+.bg00509d{
+    background-color: #00509d;
+}
+.bg006dd2{
+  background-color: #006dd2;
+}
+.bgfdc500{
+    background-color: #fdc500;
+}
+.bgffd500{
+    background-color: #ffd500;
+}
+
+
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: #00509d;
+  transition: transform 0.25s ease-out;
+  z-index: -1;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+}
+
+.hover-underline-animation.left::after {
+  transform-origin: bottom center;
+}
+
+.hover-underline-animation.left:hover::after {
+  transform-origin: bottom center;
+}
