@@ -1,44 +1,21 @@
 <script>
-    import "../../app.css"
 </script>
 
-<div class="box_category_type items-center px-5">
-    <a class="type bgfdc500"href="/">Math</a>
-    <a class="type bgfdc500"href="/">Physics</a>
-    <a class="type bgfdc500"href="/">English</a>
+<div class="flex h-[52px] w-full text-center items-center justify-center px-5">
+    <a class="ml-[10px] w-[100px] h-[28px] rounded-[7px] bgfdc500"href="/">Math</a>
+    <a class="ml-[10px] w-[100px] h-[28px] rounded-[7px] bgfdc500"href="/">Physics</a>
+    <a class="ml-[10px] w-[100px] h-[28px] rounded-[7px] bgfdc500"href="/learning/eng">English</a>
 </div>
 
-<div class="Container_game">
-    <a class="game bg00509d" href="/learning/math">Math</a>
-    <a class="game bg00509d" href="/learning/">Physics</a>
-    <a class="game bg00509d" href="/learning/eng">English</a>
+<div class="block md:flex w-full justify-around gap-5 px-5">
+    <div class="w-full h-[240px] rounded-[7px] my-4 md:my-[0px] bg00509d"></div>
+    <div class="w-full h-[240px] rounded-[7px] my-4 md:my-[0px] bg00509d"></div>
+    <div class="w-full h-[240px] rounded-[7px] my-4 md:my-[0px] bg00509d"></div>
+
 </div>
 
 
 <style>
-.box_category_type{
-    display: flex;
-    height: 52px;
-    text-align: center;
-}
 
-.type{
-    margin-left: 10px;
-    width: 100px;
-    height: 28px;
-    border-radius: 7px;
-}
-
-.game{
-    width: 100%;
-    height: 240px;
-    border-radius: 7px;
-    margin: 5px;
-}
-
-.Container_game{
-    display: flex;
-    width: 60%;
-    margin-left: 20%;
-}
 </style>
+
