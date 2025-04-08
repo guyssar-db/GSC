@@ -9,9 +9,9 @@
 </div>
 
 <div class="Container_game">
-    <div class="game bg00509d"></div>
-    <div class="game bg00509d"></div>
-    <div class="game bg00509d"></div>
+    <a class="game bg00509d" href="/learning/math">Math</a>
+    <a class="game bg00509d" href="/learning/">Physics</a>
+    <a class="game bg00509d" href="/learning/eng">English</a>
 </div>
 
 
