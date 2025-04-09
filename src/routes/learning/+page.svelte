@@ -1,13 +1,15 @@
 <script>
+  
+
 	let selectedFilter = 'All';
 
 	const subjects = ['Math', 'Physics', 'English','Thai'];
-
+	const path_subjects = ['Math1', 'Physics2', 'English3',"Math4","Physic5","English6"];// เส้นทางของโฟล์เดอร์เกมเขียนเรียงตามลำดับที่ตั้งเอาไว้่
 
 	const cards = [
 		{ title: 'พื้นฐานสมการเชิงเส้น', description: 'เรียนรู้เกี่ยวกับสมการและการแก้สมการเบื้องต้น', tags: ['Math'], index:['1'] },
 		{ title: 'แรงและการเคลื่อนที่', description: 'เข้าใจหลักการพื้นฐานของแรงและกฎการเคลื่อนที่ของนิวตัน', tags: ['Physics'] , index:['2'] },
-		{ title: 'การเขียนอีเมลภาษาอังกฤษ', description: 'ฝึกเขียนอีเมลอย่างมืออาชีพด้วยภาษาอังกฤษ', tags: ['English'] , index:['3'] },
+		{ title: 'ทายคำภาษาอังกฤษ', description: 'ฝึกเขียนอย่างมืออาชีพด้วยภาษาอังกฤษ', tags: ['English'] , index:['3'] },
 		{ title: 'ฟังก์ชันและกราฟ', description: 'วิเคราะห์พฤติกรรมของฟังก์ชันด้วยกราฟ', tags: ['Math'], index:['4'] },
 		{ title: 'เสียงและคลื่น', description: 'ศึกษาธรรมชาติของเสียง การสั่น และคลื่นเสียง', tags: ['Physics'], index:['5']  },
 		{ title: 'การฟังเพื่อจับใจความ', description: 'พัฒนาทักษะการฟังภาษาอังกฤษในสถานการณ์จริง', tags: ['English'], index:['6']  },
@@ -31,6 +33,7 @@
 			class:bg003f88={selectedFilter !== 'All'}
 			on:click={() => selectedFilter = 'All'}
 		>ทั้งหมด</button>
+
 
 		{#each subjects as subject}
 			<button
@@ -60,7 +63,7 @@
                 </div>
                 {#each card.index as index}
                 <a
-                    href={`/learning/${index}`}
+                    href={`/learning/${path_subjects[index-1]}`}
                     class="inline-block mt-2 px-4 py-2 w-full text-center bgfdc500 text-black rounded-md font-semibold hover:bgffc700 transition-all"
                 >เริ่มเรียนรู้</a>
                 {/each}
