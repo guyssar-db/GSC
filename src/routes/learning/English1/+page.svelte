@@ -14,6 +14,7 @@
   let lives = 5;
   let showNextButton = false;
   let resultMessage = '';
+  let letterColors = [];
 
   const fullFakePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -30,7 +31,7 @@
   }
 
   function getRandomFakeLetters(count) {
-    const filtered = fullFakePool.filter((letter) => !wordLetters.includes(letter));
+    const filtered = fullFakePool.filter((letter) => !word.includes(letter));
     const shuffled = [...filtered].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   }
@@ -48,6 +49,7 @@
     if (letterObj) {
       allLetters.push(letterObj);
       userInput[index] = null;
+      letterColors[index] = '';
     }
   }
 
@@ -60,6 +62,7 @@
       allUniqueLetters.map((l, i) => ({ letter: l, id: i }))
     );
     userInput = Array(word.length).fill(null);
+    letterColors = Array(word.length).fill('');
     imagePath = `/images/${word}.webp`;
     resultMessage = '';
     showNextButton = false;
@@ -71,6 +74,14 @@
       resultMessage = 'กรุณาใส่ตัวอักษรให้ครบทุกช่อง';
       return;
     }
+
+    letterColors = userInput.map((l, i) => {
+      const letter = l?.letter;
+      if (!letter) return '';
+      if (letter === word[i]) return 'bg-green-400 text-black';
+      else if (word.includes(letter)) return 'bg-yellow-300 text-black';
+      else return 'bg-red-300 text-black'; 
+    });
 
     if (userWord === word) {
       resultMessage = '✅ ถูกต้อง! เยี่ยมมาก!';
@@ -93,13 +104,13 @@
   });
 </script>
 
-
 <div class="p-8 max-w-xl mx-auto text-center space-y-6">
   <h1 class="text-2xl font-bold">ทายคำภาษาอังกฤษ</h1>
   <div class="flex justify-center gap-8 text-lg font-semibold">
     <div>คะแนน: {score}</div>
     <div>❤️ พลังชีวิต: {lives}</div>
   </div>
+
   <div>
     <img src={imagePath} alt={word} class="w-40 mx-auto" />
   </div>
@@ -109,7 +120,7 @@
       <!-- svelte-ignore a11y_click_events_have_key_events -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div
-        class="w-12 h-12 text-xl border-2 border-gray-400 rounded-md flex items-center justify-center bg-white text-black cursor-pointer"
+        class={`w-12 h-12 text-xl border-2 border-gray-400 rounded-md flex items-center justify-center cursor-pointer ${letterColors[index] || 'bg-white text-black'}`}
         on:click={() => removeLetterFromInput(index)}
       >
         {letterObj ? letterObj.letter : ''}
@@ -127,43 +138,38 @@
       </button>
     {/each}
   </div>
-<div>
+
   {#if resultMessage}
-  <div class="mt-3 text-lg font-semibold text-gray-800">
-    {resultMessage}
-  </div>
-{/if}
+    <div class="mt-3 text-lg font-semibold text-gray-800">
+      {resultMessage}
+    </div>
+  {/if}
+
+  {#if !showNextButton && lives > 0}
+    <button
+      on:click={checkAnswer}
+      class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+    >
+      เช็คคำตอบ
+    </button>
+  {/if}
+
+  {#if showNextButton}
+    <button
+      on:click={resetGame}
+      class="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500"
+    >
+      ข้อต่อไป
+    </button>
+  {/if}
+
+  {#if lives <= 0}
+    <div class="text-red-600 font-bold mt-4">😵 หมดพลังชีวิตแล้ว!</div>
+    <button
+      on:click={fullRestart}
+      class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300"
+    >
+      เริ่มใหม่
+    </button>
+  {/if}
 </div>
-
-{#if !showNextButton && lives > 0}
-  <button
-    on:click={checkAnswer}
-    class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
-  >
-    เช็คคำตอบ
-  </button>
-{/if}
-
-{#if showNextButton}
-  <button
-    on:click={resetGame}
-    class="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500"
-  >
-    ข้อต่อไป
-  </button>
-{/if}
-
-{#if lives <= 0}
-  <div class="text-red-600 font-bold mt-4">😵 หมดพลังชีวิตแล้ว!</div>
-  
-  <button
-  on:click={fullRestart}
-  class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300"
-  >
-  เริ่มใหม่
-</button>
-{/if}
-</div>
-
-<style>
-</style>
