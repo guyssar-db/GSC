@@ -36,6 +36,7 @@
 	</div>
 {/if}
 
-<main class="min-h-screen bg-white text-black">
+<!-- <main class="min-h-screen bg-white text-black">
+
+</main> -->
 	{@render children()}
-</main>
