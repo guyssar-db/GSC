@@ -2,7 +2,7 @@
 </script>
 
 
-<section class="relative bg-[url('./john-schnobrich-2FPjlAyMQTA-unsplash.jpg')] bg-cover bg-center bg-no-repeat py-40 px-7 md:px-16 text-center text-white overflow-hidden">
+<section class="relative bg-[url('/john-schnobrich-2FPjlAyMQTA-unsplash.jpg')] bg-cover bg-center bg-no-repeat py-40 px-7 md:px-16 text-center text-white overflow-hidden">
 	<div class="absolute inset-0 bg-black opacity-70 z-0"></div>
 	<div class="relative z-10">
 		<h1 class="text-4xl md:text-5xl font-bold mb-6">ยินดีต้อนรับสู่ EduSite</h1>
