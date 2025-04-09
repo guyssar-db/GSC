@@ -1,5 +1,7 @@
 <script>
-  const words = ['APPLE', 'BANANA','CAR'];
+  import { onMount } from 'svelte';
+
+  const words = ['APPLE', 'BANANA', 'CAR'];
 
   let word = '';
   let wordLetters = [];
@@ -8,18 +10,20 @@
   let allLetters = [];
   let userInput = [];
   let imagePath = '';
+  let score = 0;
+  let lives = 5;
+  let showNextButton = false;
+  let resultMessage = '';
 
   const fullFakePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   function shuffle(array) {
-    let currentIndex = array.length,
-      randomIndex;
+    let currentIndex = array.length, randomIndex;
     while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
       [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
+        array[randomIndex], array[currentIndex],
       ];
     }
     return array;
@@ -48,39 +52,54 @@
   }
 
   function resetGame() {
-  word = words[Math.floor(Math.random() * words.length)].toUpperCase();
-  wordLetters = [...new Set(word.split(''))];
-  fakeLetters = getRandomFakeLetters(3);
-  allUniqueLetters = [...wordLetters, ...fakeLetters];
-  allLetters = shuffle(
-    allUniqueLetters.map((l, i) => ({ letter: l, id: i }))
-  );
-  userInput = Array(word.length).fill(null);
-  imagePath = `/images/${word}.jpeg`;
-  resultMessage = '';
-}
-  let resultMessage = '';
-
-function checkAnswer() {
-  const userWord = userInput.map(l => l?.letter || '').join('');
-  if (userWord.length !== word.length) {
-    resultMessage = 'กรุณาใส่ตัวอักษรให้ครบทุกช่อง';
-    return;
+    word = words[Math.floor(Math.random() * words.length)].toUpperCase();
+    wordLetters = [...new Set(word.split(''))];
+    fakeLetters = getRandomFakeLetters(3);
+    allUniqueLetters = [...wordLetters, ...fakeLetters];
+    allLetters = shuffle(
+      allUniqueLetters.map((l, i) => ({ letter: l, id: i }))
+    );
+    userInput = Array(word.length).fill(null);
+    imagePath = `/images/${word}.webp`;
+    resultMessage = '';
+    showNextButton = false;
   }
 
-  if (userWord === word) {
-    resultMessage = '✅ ถูกต้อง! เยี่ยมมาก!';
-  } else {
-    resultMessage = '❌ ผิด ลองใหม่อีกครั้ง!';
-  }
-}
+  function checkAnswer() {
+    const userWord = userInput.map(l => l?.letter || '').join('');
+    if (userWord.length !== word.length) {
+      resultMessage = 'กรุณาใส่ตัวอักษรให้ครบทุกช่อง';
+      return;
+    }
 
-  resetGame();
+    if (userWord === word) {
+      resultMessage = '✅ ถูกต้อง! เยี่ยมมาก!';
+      score += 1;
+      showNextButton = true;
+    } else {
+      resultMessage = '❌ ผิด ลองใหม่อีกครั้ง!';
+      lives -= 1;
+    }
+  }
+
+  function fullRestart() {
+    score = 0;
+    lives = 5;
+    resetGame();
+  }
+
+  onMount(() => {
+    resetGame();
+  });
 </script>
+
 
 <div class="p-8 max-w-xl mx-auto text-center space-y-6">
   <h1 class="text-2xl font-bold">ทายคำภาษาอังกฤษ</h1>
-
+  <div class="flex justify-center gap-8 text-lg font-semibold">
+    <div>คะแนน: {score}</div>
+    <div>❤️ พลังชีวิต: {lives}</div>
+  </div>
   <div>
     <img src={imagePath} alt={word} class="w-40 mx-auto" />
   </div>
@@ -116,15 +135,34 @@ function checkAnswer() {
 {/if}
 </div>
 
+{#if !showNextButton && lives > 0}
   <button
-  on:click={checkAnswer}
-  class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
->
-  เช็คคำตอบ
-</button>
-  <button on:click={resetGame} class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">
-    เริ่มใหม่
+    on:click={checkAnswer}
+    class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+  >
+    เช็คคำตอบ
   </button>
+{/if}
+
+{#if showNextButton}
+  <button
+    on:click={resetGame}
+    class="mt-4 bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500"
+  >
+    ข้อต่อไป
+  </button>
+{/if}
+
+{#if lives <= 0}
+  <div class="text-red-600 font-bold mt-4">😵 หมดพลังชีวิตแล้ว!</div>
+  
+  <button
+  on:click={fullRestart}
+  class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300"
+  >
+  เริ่มใหม่
+</button>
+{/if}
 </div>
 
 <style>
