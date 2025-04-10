@@ -207,6 +207,7 @@ on:click={() => currentView = 'game'}
         {resultMessage}
         {#if score === 10}
           <p>🎉 ยินดีด้วย! คุณตอบถูกหมดเลย!</p>
+          <button on:click={fullRestart} class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">เริ่มใหม่</button>
         {/if}
       </div>
     {/if}
