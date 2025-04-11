@@ -265,7 +265,7 @@ on:click={() => currentView = 'game'}
     {/if}
     {#if lives <= 0}
       <div class="text-red-600 font-bold mt-4">😵 หมดพลังชีวิตแล้ว!</div>
-      <button on:click={fullRestart} class="mt-4 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300">เริ่มใหม่</button>
+      <button on:click={fullRestart} class="mt-4 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md hover:bg-gray-300">เริ่มใหม่</button>
     {/if}
     {#if lives > 0 && score < 10}
       {#if showNextButton}

@@ -4,7 +4,7 @@
 	const subjects = ['Math', 'Physics', 'English', 'Thai'];
   
 	const cards = [
-	  { title: 'พื้นฐานสมการเชิงเส้น', description: 'เรียนรู้เกี่ยวกับสมการและการแก้สมการเบื้องต้น', tags: ['Math'], index: ['1'], level: [''] },
+	  { title: 'อนุกรมเลขคณิต', description: 'เรียนรู้เกี่ยวกับการหาอนุกรมเลขคณิต', tags: ['Math'], index: ['1'], level: ['Normal'] },
 	  { title: 'แรงและการเคลื่อนที่', description: 'เข้าใจหลักการพื้นฐานของแรงและกฎการเคลื่อนที่ของนิวตัน', tags: ['Physics'], index: ['1'], level: [''] },
 	  { title: 'ทายคำภาษาอังกฤษ', description: 'ฝึกเขียนอย่างมืออาชีพด้วยภาษาอังกฤษ', tags: ['English'], index: ['1'], level: ['Easy'] },
 	  { title: 'ฟังก์ชันและกราฟ', description: 'วิเคราะห์พฤติกรรมของฟังก์ชันด้วยกราฟ', tags: ['Math'], index: ['2'], level: [''] },
