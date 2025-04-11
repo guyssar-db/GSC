@@ -396,9 +396,9 @@ function onBallCollision() {
         <li>กำหนดจำนวนเริ่มต้น และจำนวนบวกต่อเนื่อง เพื่อทำให้วงกลมตรงกลางมีค่าเป็น 0</li>
         <li>สามารถตอบผิดได้เพียง 3 ครั้งก่อนตัวเลขบนวงกลมสีเทาจะเปลี่ยนไปแบบสุ่ม</li>
         <li>สูตรผลบวกของอนุกรมเลขคณิต
-          <span>S<sub>n</sub> = <sup>n</sup>/<sub>2</sub>( 2a + (n-1)d)</span>
+          <span class="font-bold">S<sub>n</sub> = <sup>n</sup>/<sub>2</sub>( 2a + (n-1)d)</span>
         </li>
-        <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+        <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700 font-bold">
           <li>S<sub>n</sub> = จำนวนที่อยู่ในวงกลมสีเทา</li>
           <li>n = จำนวนบอล</li>
           <li>a = จำนวนเริ่มต้น</li>
