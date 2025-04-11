@@ -25,13 +25,23 @@
   let fixcurrentNumber = 0;
   let life = 3;
   let ballcount = 5;
+  
   let gameStarted = false;
   let ball2Started = false;
   let ball3Started = false;
   let ball4Started = false;
   let ball5Started = false;
+
   let resultMessage = "";
   let currentView = 'learning';
+
+  let showNextBall2Btn = false;
+  let showNextBall3Btn = false;
+  let showNextBall4Btn = false;
+  let showNextBall5Btn = false;
+
+  let showHowToPlay = false;
+  let n = 'n';
 
   function animate() {
       ball1.vy += gravity;
@@ -53,6 +63,7 @@
               if (Math.abs(ball1.vx) < 0.5) {
                   ball1.vx = dx1 > 0 ? 2 : -2;
               }
+              onBallCollision();
           }
       }
 
@@ -90,6 +101,7 @@
                   if (Math.abs(ball2.vx) < 0.5) {
                       ball2.vx = dx2 > 0 ? 2 : -2;
                   }
+                  onBallCollision();
               }
           }
 
@@ -128,6 +140,7 @@
                   if (Math.abs(ball3.vx) < 0.5) {
                       ball3.vx = dx3 > 0 ? 2 : -2;
                   }
+                  onBallCollision();
               }
           }
 
@@ -166,6 +179,7 @@
                   if (Math.abs(ball4.vx) < 0.5) {
                       ball4.vx = dx4 > 0 ? 2 : -2;
                   }
+                  onBallCollision();
               }
           }
 
@@ -204,6 +218,7 @@
                   if (Math.abs(ball5.vx) < 0.5) {
                       ball5.vx = dx5 > 0 ? 2 : -2;
                   }
+                  onBallCollision();
               }
           }
 
@@ -223,34 +238,65 @@
       }
 
       if (gameStarted) {
-          requestAnimationFrame(animate);
-      }
+    const balls = [ball1, ball2Started && ball2, ball3Started && ball3, ball4Started && ball4, ball5Started && ball5].filter(Boolean);
+
+    for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+            checkBallCollision(balls[i], balls[j]);
+        }
+    }
+    requestAnimationFrame(animate);
+}
+
   }
 
   function startGame() {
-      if (damagestart != null && damageplus != null) {
-          if (fixcurrentNumber == 0) {
-              fixcurrentNumber += currentNumber;
-          }
-          gameStarted = true;
-          animate();
-          resultMessage = "";
-      } else {
-          resultMessage = "กรุณาใส่ตัวอักษรให้ครบทุกช่อง";
+    if (damagestart != null && damageplus != null) {
+      if (fixcurrentNumber == 0) {
+        fixcurrentNumber += currentNumber;
       }
+      gameStarted = true;
+      resultMessage = "";
+      animate();
+
+      setTimeout(() => {
+        showNextBall2Btn = true;
+      }, 2000);
+    } else {
+      resultMessage = "กรุณาใส่ตัวเลขให้ครบทุกช่อง";
+    }
   }
 
   function startNextBall() {
-      ball2Started = true;
+    ball2Started = true;
+    showNextBall2Btn = false;
+
+    setTimeout(() => {
+      showNextBall3Btn = true;
+    }, 2000);
   }
+
   function startNextBall3() {
-      ball3Started = true;
+    ball3Started = true;
+    showNextBall3Btn = false;
+
+    setTimeout(() => {
+      showNextBall4Btn = true;
+    }, 2000);
   }
+
   function startNextBall4() {
-      ball4Started = true;
+    ball4Started = true;
+    showNextBall4Btn = false;
+
+    setTimeout(() => {
+      showNextBall5Btn = true;
+    }, 2000);
   }
+
   function startNextBall5() {
-      ball5Started = true;
+    ball5Started = true;
+    showNextBall5Btn = false;
   }
 
   function resetGame() {
@@ -264,11 +310,17 @@
       ball3Started = false;
       ball4Started = false;
       ball5Started = false;
+      showNextBall2Btn = false;
+      showNextBall3Btn = false;
+      showNextBall4Btn = false;
+      showNextBall5Btn = false;
       ball1 = { x: 170, y: 0, vx: 0, vy: 0, rotation: 0 };
       ball2 = { x: 170, y: 0, vx: 0, vy: 0, rotation: 0 };
       ball3 = { x: 170, y: 0, vx: 0, vy: 0, rotation: 0 };
       ball4 = { x: 170, y: 0, vx: 0, vy: 0, rotation: 0 };
       ball5 = { x: 170, y: 0, vx: 0, vy: 0, rotation: 0 };
+      damageplus = null;
+      damagestart = null;
       if (currentNumber != 0) {
           life--;
       } else {
@@ -277,14 +329,93 @@
       }
       if (life == 0) {
           life = 3;
+          const randomIndex = Math.floor(Math.random() * numpool.length);
+          currentNumber = numpool[randomIndex];
       }
   }
+
+  function checkBallCollision(ballA, ballB) {
+    const dx = ballB.x - ballA.x;
+    const dy = ballB.y - ballA.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < ballRadius * 2) {
+        const angle = Math.atan2(dy, dx);
+        const overlap = ballRadius * 2 - distance;
+        const halfOverlap = overlap / 2;
+
+        ballA.x -= Math.cos(angle) * halfOverlap;
+        ballA.y -= Math.sin(angle) * halfOverlap;
+        ballB.x += Math.cos(angle) * halfOverlap;
+        ballB.y += Math.sin(angle) * halfOverlap;
+
+        const tempVx = ballA.vx;
+        const tempVy = ballA.vy;
+        ballA.vx = ballB.vx * friction;
+        ballA.vy = ballB.vy * friction;
+        ballB.vx = tempVx * friction;
+        ballB.vy = tempVy * friction;
+    }
+}
+
+function onBallCollision() {
+    const targetDiv = document.getElementById("target");
+    targetDiv.classList.add("scaled");
+    setTimeout(() => {
+        targetDiv.classList.remove("scaled"); 
+    }, 100); 
+}
+
   onMount(() => {
       const randomIndex = Math.floor(Math.random() * numpool.length);
       currentNumber = numpool[randomIndex];
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML';
+      script.async = true;
+      document.head.appendChild(script);
+      if (window.MathJax) {
+      window.MathJax.Hub.Queue(['Typeset', window.MathJax.Hub]);
+    }
   });
 </script>
-
+{#if showHowToPlay}
+  <!-- พื้นหลังจาง -->
+  <div class="fixed inset-0 bg-[#00183e] bg-opacity-50 flex items-center justify-center z-50">
+    <!-- กล่อง Modal -->
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md relative">
+      <button
+        class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl"
+        on:click={() => showHowToPlay = false}
+      >
+      <p class="font-xl font-bold">
+        ×
+      </p>
+      </button>
+      <h2 class="text-xl font-bold text-blue-800 mb-4">วิธีเล่นเกม</h2>
+      <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+        <li>กำหนดจำนวนเริ่มต้น และจำนวนบวกต่อเนื่อง เพื่อทำให้วงกลมตรงกลางมีค่าเป็น 0</li>
+        <li>สามารถตอบผิดได้เพียง 3 ครั้งก่อนตัวเลขบนวงกลมสีเทาจะเปลี่ยนไปแบบสุ่ม</li>
+        <li>สูตรผลบวกของอนุกรมเลขคณิต
+          <span>S<sub>n</sub> = <sup>n</sup>/<sub>2</sub>( 2a + (n-1)d)</span>
+        </li>
+        <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+          <li>S<sub>n</sub> = จำนวนที่อยู่ในวงกลมสีเทา</li>
+          <li>n = จำนวนบอล</li>
+          <li>a = จำนวนเริ่มต้น</li>
+          <li>d = จำนวนบวกต่อเนื่อง</li>
+        </ul>
+      </ul>
+      <div class="mt-6 text-center">
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          on:click={() => showHowToPlay = false}
+        >
+          เข้าใจแล้ว!
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
 <div class="flex justify-center gap-4 mt-6">
   <button
       class="px-4 py-2 rounded-md font-semibold bg-yellow-400 text-black hover:bg-yellow-500 transition"
@@ -297,11 +428,20 @@
       on:click={() => currentView = 'game'}
       >🎮 Minigame</button
   >
+  {#if currentView === 'game'}
+    <button
+        class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300 text-sm font-semibold"
+        on:click={() => showHowToPlay = !showHowToPlay}
+        >
+          ℹ️ วิธีเล่น
+        </button>
+  {/if}
 </div>
 
 
 {#if currentView === 'game'}
-<div class="mt-8 flex justify-center gap-12 text-lg font-semibold">
+<h1 class="text-3xl font-bold text-center text-blue-800 my-8">เกมหย่อนบอลให้เป็น 0</h1>
+<div class="flex justify-center gap-12 text-lg font-semibold">
   <div class="text-gray-800">🔵 จำนวนบอล: {ballcount}</div>
   <div>❤️ พลังชีวิต: {life}</div>
 </div>
@@ -310,12 +450,13 @@
   <div
       class="w-[400px] h-[350px] bg-white border-4 border-gray-300 rounded-xl shadow-lg relative overflow-hidden"
   >
-      <div
-          class="w-[70px] h-[70px] bg-gray-500 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-white font-bold text-xl"
-          style="top: {targetY}px;"
-      >
-          {currentNumber}
-      </div>
+  <div
+  class="w-[70px] h-[70px] bg-gray-500 rounded-full absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-white font-bold text-xl target"
+  style="top: {targetY}px;"
+  id="target"
+>
+  {currentNumber}
+</div>
 
       {#if gameStarted}
           <div
@@ -376,7 +517,7 @@
   <div class="flex gap-3 justify-around">
       <div>
           <p class="block text-gray-700 font-semibold mb-1">
-              ความเสียหายเริ่มต้น : {damagestart}
+             จำนวนเริ่มต้น : {damagestart}
           </p>
           {#if !gameStarted}
               <input
@@ -389,7 +530,7 @@
       </div>
       <div>
           <p class="block text-gray-700 font-semibold mb-1">
-              ความเสียหายต่อเนื่อง : {damageplus}
+              จำนวนบวกต่อเนื่อง : {damageplus}
           </p>
           {#if !gameStarted}
               <input
@@ -410,28 +551,28 @@
       </button>
   {/if}
 
-  {#if gameStarted && !ball2Started}
+  {#if gameStarted && !ball2Started && showNextBall2Btn}
       <button
           class="w-full bg-yellow-400 hover:bg-yellow-600 hover:text-white font-bold py-2 px-4 rounded-md transition"
           on:click={startNextBall}
       >
           ➡️ ถัดไป ลูกที่ 2
       </button>
-  {:else if gameStarted && !ball3Started}
+  {:else if gameStarted && !ball3Started&& showNextBall3Btn}
       <button
           class="w-full bg-yellow-400 hover:bg-yellow-600 hover:text-white font-bold py-2 px-4 rounded-md transition"
           on:click={startNextBall3}
       >
           ➡️ ถัดไป ลูกที่ 3
       </button>
-  {:else if gameStarted && !ball4Started}
+  {:else if gameStarted && !ball4Started && showNextBall4Btn}
       <button
           class="w-full bg-yellow-400 hover:bg-yellow-600 hover:text-white font-bold py-2 px-4 rounded-md transition"
           on:click={startNextBall4}
       >
           ➡️ ถัดไป ลูกที่ 4
       </button>
-  {:else if gameStarted && !ball5Started}
+  {:else if gameStarted && !ball5Started && showNextBall5Btn}
       <button
           class="w-full bg-yellow-400 hover:bg-yellow-600 hover:text-white font-bold py-2 px-4 rounded-md transition"
           on:click={startNextBall5}
@@ -450,3 +591,4 @@
   {/if}
 </div>
 {/if}
+

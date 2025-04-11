@@ -53,3 +53,11 @@
 .hover-underline-animation.left:hover::after {
   transform-origin: bottom center;
 }
+
+.target {
+  transition: transform 0.2s ease-in-out; 
+}
+
+.target.scaled {
+  transform: scale(0.7); 
+}
