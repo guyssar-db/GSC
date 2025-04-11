@@ -37,6 +37,7 @@
   let letterColors = [];
   let usedWords = [];
   const fullFakePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  let showHowToPlay = false;
 
   function shuffle(array) {
     let currentIndex = array.length, randomIndex;
@@ -144,6 +145,14 @@ on:click={() => currentView = 'game'}
 >
 🎮 Minigame
 </button>
+  {#if currentView === 'game'}
+    <button
+        class="bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300 text-sm font-semibold"
+        on:click={() => showHowToPlay = !showHowToPlay}
+        >
+          ℹ️ วิธีเล่น
+        </button>
+  {/if}
 </div>
 
 
@@ -153,7 +162,7 @@ on:click={() => currentView = 'game'}
     <div class="w-full text-center bg-red-400 p-3 font-bold">
       <p>ยังไม่ใส่เสียง 🔊</p>
     </div>
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid md:grid-cols-3 gap-8 ">
       {#each words as word}
         <div class="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition">
           <img src={`/images/${word}.webp`} alt={word} class="w-full h-40 object-contain mb-4" />
@@ -173,8 +182,51 @@ on:click={() => currentView = 'game'}
 {/if}
 
 {#if currentView === 'game'}
+{#if showHowToPlay}
+  <!-- พื้นหลังจาง -->
+  <div class="fixed inset-0 bg-[#00183e] bg-opacity-50 flex items-center justify-center z-50">
+    <!-- กล่อง Modal -->
+    <div class="bg-white p-6 rounded-lg shadow-xl w-11/12 max-w-md relative">
+      <button
+        class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl"
+        on:click={() => showHowToPlay = false}
+      >
+      <p class="font-xl font-bold">
+        ×
+      </p>
+      </button>
+      <h2 class="text-xl font-bold text-blue-800 mb-4">วิธีเล่นเกม</h2>
+      <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+        <li>ดูภาพและเดาว่าคำศัพท์ภาษาอังกฤษคืออะไร</li>
+        <li>กดตัวอักษรสีฟ้าจากด้านล่าง เพื่อเติมคำตอบในช่องสีขาว</li>
+        <li>กด “เช็คคำตอบ” เพื่อตรวจว่าถูกไหม</li>
+        <li>หากตอบถูก จะได้คะแนน และสามารถไปข้อต่อไป</li>
+        <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+          <li>🟩 สีเขียวคือ มีตัวอักษรนั้นอยู่ในคำตอบและตำแหน่งถูกต้อง</li>
+        </ul>
+        <li>หากตอบผิด จะเสีย ❤️ พลังชีวิต</li>
+        <ul class="list-disc pl-5 text-left space-y-2 text-sm text-gray-700">
+          <li>🟨 สีเหลืองคือ มีตัวอักษรนั้นอยู่ในคำตอบแต่ตำแหน่งไม่ถูกต้อง</li>
+          <li>🟥 สีแดงคือ ไม่มีตัวอักษรนั้นอยู่ในคำตอบ</li>
+        </ul>
+        <li>ตอบถูกครบ 10 คำ ถือว่าชนะ!</li>
+      </ul>
+      <div class="mt-6 text-center">
+        <button
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          on:click={() => showHowToPlay = false}
+        >
+          เข้าใจแล้ว!
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+
   <div class="p-8 max-w-xl mx-auto text-center space-y-6">
-    <h1 class="text-2xl font-bold">เกมทายคำภาษาอังกฤษ</h1>
+    <h1 class="text-3xl font-bold text-center text-blue-800 mb-8">เกมทายคำภาษาอังกฤษ</h1>
+
     <div class="flex justify-center gap-8 text-lg font-semibold">
       <div>คะแนน: {score}</div>
       <div>❤️ พลังชีวิต: {lives}</div>
